@@ -1306,7 +1306,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.216',
+    apiVersion: '2.13.219',
     source: {
       data: source.data,
       url: source.url,
@@ -3403,9 +3403,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.216';
+const version = '2.13.219';
 exports.version = version;
-const build = '399a0ec60';
+const build = '8db294896';
 exports.build = build;
 
 /***/ }),
@@ -15617,6 +15617,12 @@ Object.defineProperty(exports, "PDFWorker", ({
     return _api.PDFWorker;
   }
 }));
+Object.defineProperty(exports, "PageViewport", ({
+  enumerable: true,
+  get: function () {
+    return _display_utils.PageViewport;
+  }
+}));
 Object.defineProperty(exports, "PasswordResponses", ({
   enumerable: true,
   get: function () {
@@ -15768,8 +15774,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.216';
-const pdfjsBuild = '399a0ec60';
+const pdfjsVersion = '2.13.219';
+const pdfjsBuild = '8db294896';
 {
   if (_is_node.isNodeJS) {
     const {
