@@ -2267,6 +2267,7 @@ class PartialEvaluator {
     stateManager = null,
     combineTextItems = false,
     includeMarkedContent = false,
+    includeGlyphInfo = true,
     sink,
     seenStyles = new Set(),
     viewBox,
@@ -2300,6 +2301,7 @@ class PartialEvaluator {
       transform: null,
       fontName: null,
       hasEOL: false,
+      glyphInfo: [],
     };
 
     // Use a circular buffer (length === 2) to save the last chars in the
@@ -2501,6 +2503,7 @@ class PartialEvaluator {
       return {
         str: bidiResult.str,
         dir: bidiResult.dir,
+        glyphInfo: [...textChunk.glyphInfo],
         width: Math.abs(textChunk.totalWidth),
         height: Math.abs(textChunk.totalHeight),
         transform: textChunk.transform,
@@ -2835,6 +2838,14 @@ class PartialEvaluator {
         }
         textChunk.str.push(glyphUnicode);
 
+        const currentTransform = getCurrentTextTransform();
+        textChunk.glyphInfo.push({
+          character: glyphUnicode,
+          height: currentTransform[3],
+          transform: currentTransform,
+          width: scaledDim,
+        });
+
         if (charSpacing) {
           if (!font.vertical) {
             textState.translateTextMatrix(
@@ -2874,6 +2885,13 @@ class PartialEvaluator {
         if (textContentItem.initialized) {
           resetLastChars();
           textContentItem.str.push(" ");
+          const currentTransform = getCurrentTextTransform();
+          textContentItem.glyphInfo.push({
+            character: " ",
+            height: currentTransform[3],
+            transform: currentTransform,
+            width: 0,
+          });
         }
         return false;
       }
@@ -2920,6 +2938,7 @@ class PartialEvaluator {
       textContent.items.push(runBidiTransform(textContentItem));
       textContentItem.initialized = false;
       textContentItem.str.length = 0;
+      textContentItem.glyphInfo.length = 0;
     }
 
     function enqueueChunk(batch = false) {

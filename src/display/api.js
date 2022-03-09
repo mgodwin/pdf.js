@@ -1093,6 +1093,8 @@ class PDFDocumentProxy {
  * @typedef {Object} TextItem
  * @property {string} str - Text content.
  * @property {string} dir - Text direction: 'ttb', 'ltr' or 'rtl'.
+ * @property {Array<any>} glyphInfo - Bounding box & transformation matrix for
+ *   each character glyph
  * @property {Array<any>} transform - Transformation matrix.
  * @property {number} width - Width in device space.
  * @property {number} height - Height in device space.
