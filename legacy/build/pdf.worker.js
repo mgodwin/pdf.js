@@ -165,7 +165,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.13.216';
+      var workerVersion = 'glyph-2.13.217';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -30083,6 +30083,14 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -32350,6 +32358,8 @@ var PartialEvaluator = /*#__PURE__*/function () {
           combineTextItems = _ref8$combineTextItem === void 0 ? false : _ref8$combineTextItem,
           _ref8$includeMarkedCo = _ref8.includeMarkedContent,
           includeMarkedContent = _ref8$includeMarkedCo === void 0 ? false : _ref8$includeMarkedCo,
+          _ref8$includeGlyphInf = _ref8.includeGlyphInfo,
+          includeGlyphInfo = _ref8$includeGlyphInf === void 0 ? true : _ref8$includeGlyphInf,
           sink = _ref8.sink,
           _ref8$seenStyles = _ref8.seenStyles,
           seenStyles = _ref8$seenStyles === void 0 ? new Set() : _ref8$seenStyles,
@@ -32377,7 +32387,8 @@ var PartialEvaluator = /*#__PURE__*/function () {
         negativeSpaceMax: -Infinity,
         transform: null,
         fontName: null,
-        hasEOL: false
+        hasEOL: false,
+        glyphInfo: []
       };
       var TRACKING_SPACE_FACTOR = 0.1;
       var NEGATIVE_SPACE_FACTOR = -0.2;
@@ -32480,6 +32491,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
         return {
           str: bidiResult.str,
           dir: bidiResult.dir,
+          glyphInfo: _toConsumableArray(textChunk.glyphInfo),
           width: Math.abs(textChunk.totalWidth),
           height: Math.abs(textChunk.totalHeight),
           transform: textChunk.transform,
@@ -32742,14 +32754,26 @@ var PartialEvaluator = /*#__PURE__*/function () {
             textChunk.prevTransform = getCurrentTextTransform();
           }
 
+          var character = void 0;
+
           if (glyph.isWhitespace) {
             textChunk.str.push(" ");
+            character = " ";
           } else {
             var glyphUnicode = glyph.unicode;
             glyphUnicode = NormalizedUnicodes[glyphUnicode] || glyphUnicode;
             glyphUnicode = (0, _unicode.reverseIfRtl)(glyphUnicode);
             textChunk.str.push(glyphUnicode);
+            character = glyphUnicode;
           }
+
+          var currentTransform = getCurrentTextTransform();
+          textChunk.glyphInfo.push({
+            character: character,
+            height: currentTransform[3],
+            transform: currentTransform,
+            width: scaledDim
+          });
 
           if (_charSpacing) {
             if (!font.vertical) {
@@ -32782,6 +32806,13 @@ var PartialEvaluator = /*#__PURE__*/function () {
         if (textOrientation * textContentItem.spaceInFlowMin <= width && width <= textOrientation * textContentItem.spaceInFlowMax) {
           if (textContentItem.initialized) {
             textContentItem.str.push(" ");
+            var currentTransform = getCurrentTextTransform();
+            textContentItem.glyphInfo.push({
+              character: " ",
+              height: currentTransform[3],
+              transform: currentTransform,
+              width: 0
+            });
           }
 
           return false;
@@ -32822,6 +32853,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
         textContent.items.push(runBidiTransform(textContentItem));
         textContentItem.initialized = false;
         textContentItem.str.length = 0;
+        textContentItem.glyphInfo.length = 0;
       }
 
       function enqueueChunk() {
@@ -92700,8 +92732,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.13.216';
-var pdfjsBuild = '399a0ec60';
+var pdfjsVersion = 'glyph-2.13.217';
+var pdfjsBuild = 'ef16ed6e4';
 })();
 
 /******/ 	return __webpack_exports__;
