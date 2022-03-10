@@ -2763,7 +2763,6 @@ class PartialEvaluator {
 
       const glyphs = font.charsToGlyphs(chars);
       const scale = textState.fontMatrix[0] * textState.fontSize;
-      const currentTransform = getCurrentTextTransform();
 
       for (let i = 0, ii = glyphs.length; i < ii; i++) {
         const glyph = glyphs[i];
@@ -2778,6 +2777,7 @@ class PartialEvaluator {
           glyphWidth = glyph.vmetric ? glyph.vmetric[0] : -glyphWidth;
         }
         let scaledDim = glyphWidth * scale;
+        const currentTransform = getCurrentTextTransform();
 
         if (glyph.isWhitespace) {
           // Don't push a " " in the textContentItem
