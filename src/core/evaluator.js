@@ -2763,6 +2763,7 @@ class PartialEvaluator {
 
       const glyphs = font.charsToGlyphs(chars);
       const scale = textState.fontMatrix[0] * textState.fontSize;
+      const currentTransform = getCurrentTextTransform();
 
       for (let i = 0, ii = glyphs.length; i < ii; i++) {
         const glyph = glyphs[i];
@@ -2838,7 +2839,6 @@ class PartialEvaluator {
         }
         textChunk.str.push(glyphUnicode);
 
-        const currentTransform = getCurrentTextTransform();
         textChunk.glyphInfo.push({
           character: glyphUnicode,
           height: currentTransform[3],
@@ -2885,6 +2885,7 @@ class PartialEvaluator {
         if (textContentItem.initialized) {
           resetLastChars();
           textContentItem.str.push(" ");
+          console.log('Adding fake space', {...textContentItem});
           const currentTransform = getCurrentTextTransform();
           textContentItem.glyphInfo.push({
             character: " ",
