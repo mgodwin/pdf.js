@@ -2885,7 +2885,6 @@ class PartialEvaluator {
         if (textContentItem.initialized) {
           resetLastChars();
           textContentItem.str.push(" ");
-          console.log('Adding fake space', {...textContentItem});
           const currentTransform = getCurrentTextTransform();
           textContentItem.glyphInfo.push({
             character: " ",
