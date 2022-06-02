@@ -2843,7 +2843,7 @@ class PartialEvaluator {
           character: glyphUnicode,
           height: currentTransform[3],
           transform: currentTransform,
-          width: scaledDim,
+          width: scaledDim * textChunk.textAdvanceScale,
         });
 
         if (charSpacing) {

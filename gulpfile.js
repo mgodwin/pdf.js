@@ -71,7 +71,7 @@ const COMMON_WEB_FILES = [
 const MOZCENTRAL_DIFF_FILE = "mozcentral.diff";
 
 const REPO = "git@github.com:mgodwin/pdf.js.git";
-const DIST_REPO_URL = "https://github.com/mgodwin/pdfjs-dist";
+const DIST_REPO_URL = "https://github.com/mgodwin/pdfjs-dist.git";
 
 const builder = require("./external/builder/builder.js");
 
